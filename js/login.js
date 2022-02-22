@@ -71,3 +71,51 @@ function Login(){
 
 
 }
+
+
+//FUNCION PARA MOSTRAR LOS USUARIOS
+function listar_usuario(){
+  //DECLARAMOS LA VARIABLE TABLE, QUE ES DONDE HACEMOS REFERENCIA A LA TABLA QUE TENEMOS EN NUESTRO HTML
+    var table = $("#tabla_usuario").DataTable({
+      "ordering":false,   
+      "bLengthChange":false,
+      "searching": { "regex": false },
+      "lengthMenu": [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
+      "pageLength": 10, //PAGINACION MAXIMA,EN ESTE CASO 10 PAGINAS
+      "destroy":true, //PARA MOSTRAR LA INFORMACION (RECARGA LA INFO CADA QUE ACCESAS A LA PAGINA)
+      "async": false ,
+      "processing": true, //MUESTRA UN MENSAJE DE PROCESSING, SI ESTE TARDA EN CARGAR
+      //Recordemos que el Método HTTP GET -> Información se envía de forma visible 
+      //Método HTTP POST -> Información se envía de forma no visible
+      "ajax":{ //DECLARAMOS LA URL Y EL TIPO DE CONSULTA
+          "url":"../controlador/controller_listar_user.php",
+          type:'POST'
+      },
+      //Las columnas que se tienen en el table del HTML van a contener la data que es el nombre del campo del Procedimiento
+      //Almacenado que hicimos
+      "columns":[
+        {"data":"id_usuario"},
+        {"data":"nombre_usuario"},
+        {"data":"apellidoP_usuario"},
+        {"data":"apellidoM_usuario"},
+        {"data":"correo_usuario"},
+        {"data":"nombre_rol"},
+        //El render lo que realiza es poder accesar a ese dato, en este caso para comparar el data
+        {"data":"estatus_usuario",
+            render: function (data, type, row ) {
+              //Si el estatus es ACTIVO, va a mostrar un span verde con ACTIVO
+              if(data=='ACTIVO'){
+                return "<span class='badge badge-success'>"+data+"</span>";                   
+              //Si el estatus es INACTIVO, va a mostrar un span rojo con INACTIVO
+                }else{
+                return "<span class='badge badge-danger'>"+data+"</span>";                 
+              }
+            }
+          },  
+          //AL FINAL AGREGAMOS 2 BOTONES PARA LA ACCION
+          {"defaultContent":"<button style='font-size:13px;' type='button' class='desactivar btn btn-danger'><i class='fa fa-trash'></i></button>&nbsp;<button style='font-size:13px;' type='button' class='activar btn btn-success'><i class='fa fa-check'></i></button>"}
+      ],
+  });
+  
+
+}

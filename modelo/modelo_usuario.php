@@ -40,5 +40,23 @@
 			}
         }
 
+        //Funcion para ver todos los usuarios por medio de un procedimiento almacenado
+        function listar_usuario(){
+            $sql = "call VISTA_USER()"; //LLAMAMOS A NUESTRO PROCEDIMIENTO ALMACENADO
+			$arreglo = array();
+            //SI LA CONSULTA REGRESA ALGO
+			if ($consulta = $this->conexion->conexion->query($sql)) {
+                //mysqli_fetch_assoc regresa una matriz asociativa que corresponde a las filas obtenidas o NULL si no hay mas filas.
+				while ($consulta_VU = mysqli_fetch_assoc($consulta)) {
+                    //Lo almacenamos en arreglo y data hace referencia
+                    //a las columnas que tenemos en Login.js que son los nombres de los campos del Procedimiento Almacenado
+                    $arreglo["data"][]=$consulta_VU;
+
+				}
+				return $arreglo; //Retornamos el arreglo
+				$this->conexion->cerrar(); //Cerramos la conexion
+			}
+        }
+
     }
 ?>
